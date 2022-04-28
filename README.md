@@ -83,7 +83,7 @@ builder.Services.AddSingleton < IPersonRepository, PersonRepository >();
 </pre>
 [Documentación](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.servicecollectionserviceextensions.addsingleton?view=dotnet-plat-ext-6.0#microsoft-extensions-dependencyinjection-servicecollectionserviceextensions-addsingleton(microsoft-extensions-dependencyinjection-iservicecollection-system-type))
 
-La ventaja que nos provee este patrón es que cuando querramos usar otra implementación de IPersonRepository, solo habrá que reemplazar el segundo parámetro por la implementación deseada.
+La ventaja que nos provee este patrón es que cuando querramos usar otra implementación de IPersonRepository, solo habrá que reemplazar el segundo parámetro por la implementación deseada, y no en cada punto donde se usaba la implementación anterior. Esto claramente reduce el impacto al cambio de implementaciones.
 
 Un detalle que vale la pena aclarar, es que hay 3 maneras similares pero con una diferencia sutil a la hora de agregar servicios, éstas son:
 
