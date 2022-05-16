@@ -9,7 +9,7 @@ namespace DI.Controllers
     [ApiController]
     public class PersonController : ControllerBase
     {
-        IPersonRepository _personRepository;
+        IPersonRepository _personRepository; //No se instancia
         public PersonController(IPersonRepository personRepository) {
             this._personRepository = personRepository;
         }

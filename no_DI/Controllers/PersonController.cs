@@ -1,16 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DI.Interfaces;
+using DI.Models;
+using DI.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace no_DI.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
-    public class PersonController : Controller
+    public class PersonController : ControllerBase
     {
-        
+        IPersonRepository _personRepository = new PersonRepository();//Sí se instancia
+
         [HttpGet]
-        public IActionResult Index()
+        public JsonResult Get([FromQuery] int? id, [FromQuery] string? name="")
         {
-            return Json(new { id=1 });
+            Person? result = null ;
+            if(id!=null)
+                result = _personRepository.getById(id.Value);
+            
+            if(!string.IsNullOrEmpty(name) && id== null)
+                result = _personRepository.getByName(name);
+
+            return new JsonResult(new
+            {
+                status = 200,
+                result = result
+            });
         }
     }
 }
