@@ -5,14 +5,16 @@
 Este es un proyecto personal, que forma parte de mi [portfolio](https://github.com/pabloMoron/profile#portfolio-personal).
 
 
-Este es un proyecto de ejemplo de inyecciones de dependencias en.NET 6, pero puede que agregue versiones anteriores del framework.
+Este es un proyecto de ejemplo de inyecciones de dependencias en.NET Core.
 
 
 ## ¿Qué es la inyección de dependencias?
 
-Es un patrón o una metodologia que permite a los objetos recibir otros objetos de los que dependen (dependencias), sin la necesidad de instanciar dichas dependencias, sino que se los suministra otra clase que inyectará la implementación deseada.
+La idea principal de la inyección de dependencias es mantener lo más bajo posible los niveles de acomplamiento de nuestras clases. El bajo acomplamiento es uno de los principios del diseño de software. 
 
-# .NET6
+Es una técnica o una metodologia que permite a los objetos recibir otros objetos de los que dependen (dependencias), sin la necesidad de instanciarlos, sino que se los suministra otra clase que inyectará la implementación deseada.
+
+# .NET Core
 
 Este es un ejemplo de un controlador sin inyeccion de dependencias.
 
