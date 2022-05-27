@@ -5,13 +5,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<IPersonRepository, PersonRepository>();
+
+builder.Services.AddSingleton<ISingleton, InjectionObject>();
+builder.Services.AddTransient<ITransient, InjectionObject>();
+builder.Services.AddScoped<IScopped, InjectionObject>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
