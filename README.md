@@ -97,6 +97,22 @@ Los objetos transient son siempre distintos, se provee de una nueva instancia pa
 
 - .AddScoped< IPersonRepository, PersonRepository >(): Un objeto Scoped se mantiene vivo dentro de una request, pero se instancia uno distinto en cada request
 
+## Resolucion de inyeccion de dependencias condicional
+En muchas situaciones se puede dar el caso de que tengamos varias implementaciones de una misma interfaz y debemos proporcional una u otra dependiendo de una condición, o del resultado de alguna ejecución.
+
+Los métodos AddSingleton, AddScopped y AddTransient tienen una sobrecarga particular que nos permite resolver este escenario.
+
+<pre>
+public static IServiceCollection AddSingleton< TService >(
+            this IServiceCollection services,
+            Func< IServiceProvider, TService > implementationFactory)
+            where TService : class
+</pre>
+
+La firma del método nos indica que recibe un delegate (una función), que es el que finalmente nos retornará un tipo concreto del servicio.
+
+Este caso se verá en el ejemplo 2.
+
 ### Ejemplo 1
 Para demostrar las diferencias entre los objetos Singleton, Scopped y Transient se agrega lo siguiente:
 
@@ -191,3 +207,99 @@ En base a las respuestas se puede observar que:
 - El ciclo de vida del objeto Scopped es el de una Request.
 - Los objetos Transient son distintos en cada Request y cada referencia.
 
+### Ejemplo 2
+
+Para la situación de lógica condicional en las dependencias, se vió que existe un método que nos da soporte a esta situación. Para llevar a cabo el ejemplo se creó una nueva aplicación con los siguientes elementos:
+
+- Una interfaz ITaxCalculator, con un método que simplemente devuelve un entero
+<pre>
+internal interface ITaxCalculator {
+  public int CalculateTax();
+}
+</pre>
+
+- 2 Implementaciones para la misma interfaz
+
+<pre>
+
+public class AustraliaTaxCalculator : ITaxCalculator {
+  public int CalculateTax() {
+    return 10;
+  }
+}
+------------------------------------
+
+internal class EuropeTaxCalculator : ITaxCalculator {
+  public int CalculateTax() {
+    return 20;
+  }
+}
+</pre>
+
+- Un enum de 2 elementos
+<pre>
+public enum Locations {
+  Europe,
+  Australia
+}
+</pre>
+
+- Una clase ficticia que reprensente una compra
+<pre>
+internal class Purchase {
+  private readonly Func< Locations, ITaxCalculator > _accessor;
+  public Purchase(Func< Locations, ITaxCalculator > accessor) {
+    this._accessor = accessor;
+  }
+
+  public int CheckOut(Locations location) {
+    var tax = _accessor(location).CalculateTax();
+    return tax + 100;
+  }
+}
+</pre>
+Es importante destacar que lo que se inyecta en las clases dependientes es el delegado, comunmente llamado accesor.
+
+
+La idea es que dependiendo de la ubicación se ejecute una implementación o la otra.
+Para esto configuramos nuestro singleton de la siguiente manera:
+
+<pre>
+
+services.AddSingleton< Func< Locations, ITaxCalculator > >(
+  ServiceProvider => key =>
+    {
+      switch (key) {
+        case Locations.Australia:
+          return ServiceProvider.GetService< AustraliaTaxCalculator >();
+
+        case Locations.Europe:
+          return ServiceProvider.GetService< EuropeTaxCalculator >();
+        
+        default:
+          return null;
+      }
+});
+</pre>
+
+Con estas instrucciones estamos pasando una función con un parametro del tipo Locations (nuestro enum), que retorne un objeto que implemente ITaxCalculator en base al parámetro que dentro de la función se referencia como 'key'.
+
+
+Luego configuramos un Singleton de tipo Purchase para que resuelva las dependencias internamente y lo instanciamos
+<pre>
+services.AddSingleton< Purchase >();
+var serviceProvider = services.BuildServiceProvider();
+var purchase = serviceProvider.GetService< Purchase >();
+</pre>
+
+La ejecución de la aplicación termina con la llamada a Purchase
+<pre>
+Console.WriteLine($"Australia purchase: {purchase.CheckOut(Locations.Australia)}");
+Console.WriteLine($"Europe purchase: {purchase.CheckOut(Locations.Europe)}");
+</pre>
+
+Lo que nos da como salida de pantalla
+<pre>
+Australia purchase: 110
+Europe purchase: 120
+</pre>

@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DI", "DI\DI.csproj", "{87F1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "no_DI", "no_DI\no_DI.csproj", "{8233CB09-E750-4A8A-A6ED-5B9AE7582CE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coupling", "Coupling\Coupling.csproj", "{BBA74394-9528-4BB6-9D66-7FE42D3483BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupling", "Coupling\Coupling.csproj", "{BBA74394-9528-4BB6-9D66-7FE42D3483BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConditionalDI", "ConditionalDI\ConditionalDI.csproj", "{174DD0AA-357C-42AE-8A0B-E6170FC826C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{BBA74394-9528-4BB6-9D66-7FE42D3483BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBA74394-9528-4BB6-9D66-7FE42D3483BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBA74394-9528-4BB6-9D66-7FE42D3483BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{174DD0AA-357C-42AE-8A0B-E6170FC826C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{174DD0AA-357C-42AE-8A0B-E6170FC826C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{174DD0AA-357C-42AE-8A0B-E6170FC826C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{174DD0AA-357C-42AE-8A0B-E6170FC826C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
